@@ -82,10 +82,31 @@
                 margin: 0 auto;
             }
 
+            label{
+                display: block;
+                padding: 1rem 0;
+            }
+
             li{
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
+            }
+
+            .digit-0, .digit-1{
+                display: inline-block;
+                width: 1.2rem;
+                height: 1.2rem;
+                text-align: center;
+                color: grey;
+            }
+
+            .digit-0{
+                background-color: lightskyblue;
+            }
+
+            .digit-1{
+                background-color: pink;
             }
 
         </style>
@@ -102,7 +123,7 @@
                 const ol = output.querySelector('ol')
 
                 input.addEventListener('input', ({target}) => {
-                    const sequence = [Number(target.value)];
+                    const sequence = [Number(target.value.trim())];
 
                     while(sequence.at(-1) !== 1){
                         sequence.push(nextSyr(sequence.at(-1)))
@@ -112,7 +133,9 @@
 
                     ol.innerHTML = ''
 
-                    for(const n of sequence){
+                    const oddSequence = sequence.filter(n => n%2===1)
+
+                    for(const n of oddSequence){
                         const li = document.createElement('li')
                         
                         const sectionDecimal = document.createElement('section')
@@ -123,7 +146,14 @@
 
                         const sectionBinary = document.createElement('section')
                         sectionBinary.classList.add('binary')
-                        sectionBinary.append(n.toString(2))
+                        sectionBinary.append(
+                            ...[...n.toString(2)].map(digit => {
+                                const span = document.createElement('span')
+                                span.classList.add(`digit-${digit}`)
+                                span.textContent = digit;
+                                return span
+                            })
+                        )
 
                         li.append(sectionBinary)
 
