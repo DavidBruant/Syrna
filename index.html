@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="referrer" content="no-referrer">
+        
+        <title>Viz Syracuse bin</title>
+        
+        <meta name="description" content=" ">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="data:,">
+        
+        <style>
+            /*
+            http://www.paulirish.com/2012/box-sizing-border-box-ftw/
+            */
+            *, *:before, *:after {
+                box-sizing: border-box;
+                /* if you really care about older browsers, add prefixed versions at your own risks */
+            }
+
+            /*
+            Repeating the background mostly makes sense in the <body>. Otherwise, people usually want the image and preferably its center (not the top-right corner)
+            */
+            *:not(body) {
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: cover;
+            }
+
+            /*
+            Makes the hidden attribute works even when an element is styled display: flex
+            http://lists.w3.org/Archives/Public/public-whatwg-archive/2014May/0001.html
+            */
+            [hidden] {
+                display: none !important;
+            }
+
+
+            html, body {
+                padding: 0;
+                margin: 0;
+            }
+
+            /*
+            In applications, there can be lists but HTML lists have bullet points and a bunch of useless styling attributes 
+            */
+            ul, ol, menu {
+                margin: 0;
+                padding: 0;
+
+            }
+
+            ul, menu {
+                list-style: none;
+            }
+
+            li {
+                margin: 0;
+                padding: 0;
+            }
+
+            button{
+                cursor: pointer;
+            }
+
+            /* default iframe borders are just ugly */
+            iframe{
+                border: 0;
+            }
+
+
+            * {
+                border-collapse: collapse;
+            }
+
+        </style>
+
+        <style>
+            body > h1, main{
+                max-width: 50rem;
+                margin: 0 auto;
+            }
+
+            li{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+        </style>
+
+        <script>
+            function nextSyr(n){
+                return n%2 === 0 ? n/2 : 3*n+1
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const output = document.querySelector('output')
+                const input = document.querySelector('input')
+
+                const ol = output.querySelector('ol')
+
+                input.addEventListener('input', ({target}) => {
+                    const sequence = [Number(target.value)];
+
+                    while(sequence.at(-1) !== 1){
+                        sequence.push(nextSyr(sequence.at(-1)))
+                    }
+
+                    console.log('sequence', sequence)
+
+                    ol.innerHTML = ''
+
+                    for(const n of sequence){
+                        const li = document.createElement('li')
+                        
+                        const sectionDecimal = document.createElement('section')
+                        sectionDecimal.classList.add('decimal')
+                        sectionDecimal.append(n.toString(10))
+
+                        li.append(sectionDecimal)
+
+                        const sectionBinary = document.createElement('section')
+                        sectionBinary.classList.add('binary')
+                        sectionBinary.append(n.toString(2))
+
+                        li.append(sectionBinary)
+
+                        ol.append(li)
+                    }
+                })
+            })
+
+        </script>
+
+    </head>
+    <body>
+        <h1>Viz Syracuse bin</h1>
+
+        <main>
+            <label>Vazy, un nombre ! 
+                <input type="number" step="1" min="0">
+            </label>
+            <output><ol></ol></output>
+        </main>
+    </body>
+</html>
